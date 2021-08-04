@@ -10,7 +10,7 @@ fi
 DATASET_NAME=$1
 MODEL_NAME=$2
 
-declare -A model_name_to_fname
+declare -a model_name_to_fname
 if [ ${DATASET_NAME} = "bair_action_free" ]; then
   model_name_to_fname=(
     [ours_deterministic]=${DATASET_NAME}_ours_deterministic_l1
