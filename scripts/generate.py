@@ -10,7 +10,7 @@ import random
 
 import cv2
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from video_prediction import datasets, models
 from video_prediction.utils.ffmpeg_gif import save_gif
 
