@@ -16,7 +16,7 @@ class SoftmotionVideoDataset(VideoDataset):
         super(SoftmotionVideoDataset, self).__init__(*args, **kwargs)
         # infer name of image feature and check if object_pos feature is present
         from google.protobuf.json_format import MessageToDict
-        example = next(tf.python_io.tf_record_iterator(self.filenames[0]))
+        example = next(tf.compat.v1.python_io.tf_record_iterator(self.filenames[0]))
         dict_message = MessageToDict(tf.train.Example.FromString(example))
         feature = dict_message['features']['feature']
         image_names = set()
