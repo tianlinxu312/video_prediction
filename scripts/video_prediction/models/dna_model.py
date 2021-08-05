@@ -21,7 +21,7 @@ import numpy as np
 import tensorflow as tf
 # import tensorflow.contrib.slim as slim
 import tf_slim as slim
-from tensorflow.contrib.layers.python import layers as tf_layers
+from tensorflow.compat.v1 import layers as tf_layers
 
 from video_prediction.models import VideoPredictionModel
 from .sna_model import basic_conv_lstm_cell
