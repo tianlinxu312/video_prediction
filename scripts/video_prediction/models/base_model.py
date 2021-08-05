@@ -256,7 +256,7 @@ def parse_values(values, type_map):
 class BaseVideoPredictionModel(object):
     def __init__(self, mode='train', hparams_dict=None, hparams=None,
                  num_gpus=None, eval_num_samples=100,
-                 eval_num_samples_for_diversity=10, eval_parallel_iterations=1):
+                 eval_num_samples_for_diversity=10, eval_parallel_iterations=1, hparam_def=None):
         """
         Base video prediction model.
 
