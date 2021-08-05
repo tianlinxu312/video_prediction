@@ -638,11 +638,11 @@ class VideoPredictionModel(BaseVideoPredictionModel):
                     if k == -1.0:
                         raise ValueError('Invalid kl_anneal_k %d when kl_anneal is sigmoid.' % k)
                     iter_num = tf.train.get_or_create_global_step()
-                    self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.to_float(iter_num) / k))
+                    self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.cast(iter_num, tf.float32) / k))
                 elif self.hparams['kl_anneal']  == 'linear':
                     start_step, end_step = self.hparams['kl_anneal_steps'] 
                     step = tf.clip_by_value(tf.compat.v1.train.get_or_create_global_step(), start_step, end_step)
-                    self.kl_weight = self.hparams['kl_weight'] * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
+                    self.kl_weight = self.hparams['kl_weight'] * tf.cast(step - start_step, tf.float32) / tf.cast(end_step - start_step, tf.float32)
                 else:
                     raise NotImplementedError
             else:
