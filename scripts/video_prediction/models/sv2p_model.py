@@ -146,7 +146,7 @@ class LayerNormalization(Layer):
 
     self.built = True
 
-  def call(self, inputs):
+  def call(self, inputs, reuse=False):
     # Compute the axes along which to reduce the mean / variance
     input_shape = inputs.shape
     ndims = len(input_shape)
@@ -254,7 +254,7 @@ class LayerNormalization(Layer):
 
 @add_arg_scope
 def layer_norm():
-    return LayerNormalization(axis=-1, name='ln')
+    return LayerNormalization(axis=-1, name='ln', reuse=False)
 
 
 def init_state(inputs,
