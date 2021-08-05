@@ -27,7 +27,7 @@ from tensorflow.compat.v1 import layers as tf_layers
 from tf_slim import add_arg_scope
 from tf_slim import layers
 from video_prediction.models import VideoPredictionModel
-from tensorflow.python.keras.engine.base_layer import Layer
+from tensorflow.compat.v1.python.keras.engine.base_layer import Layer
 
 
 # Amount to use when lower bounding tensors
