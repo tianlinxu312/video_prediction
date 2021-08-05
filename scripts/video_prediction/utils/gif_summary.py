@@ -20,7 +20,7 @@ from __future__ import print_function
 import numpy as np
 import tensorflow as tf
 # from tensorflow.python.ops import summary_op_util
-from tensorflow.python.distribute.summary_op_util import skip_summary, summary_scope
+from tensorflow.python.distribute.summary_op_util import skip_summary, summary_scope, collect
 
 from video_prediction.utils import ffmpeg_gif
 
@@ -111,5 +111,5 @@ def gif_summary(name, tensor, max_outputs=3, fps=10, collections=None,
         tf.string,
         stateful=False,
         name=scope)
-    summary_op_util.collect(val, collections, [tf.GraphKeys.SUMMARIES])
+    collect(val, collections, [tf.GraphKeys.SUMMARIES])
   return val
