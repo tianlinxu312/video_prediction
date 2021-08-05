@@ -641,12 +641,12 @@ class VideoDataset(BaseVideoDataset):
         for i in range(self._max_sequence_length):
             for example_name, (name, shape) in self.state_like_names_and_shapes.items():
                 if example_name == 'images':  # special handling for image
-                    features[name % i] = tf.FixedLenFeature([1], tf.string)
+                    features[name % i] = tf.io.FixedLenFeature([1], tf.string)
                 else:
-                    features[name % i] = tf.FixedLenFeature(shape, tf.float32)
+                    features[name % i] = tf.io.FixedLenFeature(shape, tf.float32)
         for i in range(self._max_sequence_length - 1):
             for example_name, (name, shape) in self.action_like_names_and_shapes.items():
-                features[name % i] = tf.FixedLenFeature(shape, tf.float32)
+                features[name % i] = tf.io.FixedLenFeature(shape, tf.float32)
 
         # check that the features are in the tfrecord
         for name in features.keys():
@@ -655,7 +655,7 @@ class VideoDataset(BaseVideoDataset):
                                  (name, '\n'.join(sorted(self._dict_message['features']['feature'].keys()))))
 
         # parse all the features of all time steps together
-        features = tf.parse_single_example(serialized_example, features=features)
+        features = tf.io.parse_single_example(serialized_example, features=features)
 
         state_like_seqs = OrderedDict([(example_name, []) for example_name in self.state_like_names_and_shapes])
         action_like_seqs = OrderedDict([(example_name, []) for example_name in self.action_like_names_and_shapes])
@@ -687,13 +687,13 @@ class SequenceExampleVideoDataset(BaseVideoDataset):
         sequence_features = dict()
         for example_name, (name, shape) in self.state_like_names_and_shapes.items():
             if example_name == 'images':  # special handling for image
-                sequence_features[name] = tf.FixedLenSequenceFeature([1], tf.string)
+                sequence_features[name] = tf.io.FixedLenSequenceFeature([1], tf.string)
             else:
-                sequence_features[name] = tf.FixedLenSequenceFeature(shape, tf.float32)
+                sequence_features[name] = tf.io.FixedLenSequenceFeature(shape, tf.float32)
         for example_name, (name, shape) in self.action_like_names_and_shapes.items():
-            sequence_features[name] = tf.FixedLenSequenceFeature(shape, tf.float32)
+            sequence_features[name] = tf.io.FixedLenSequenceFeature(shape, tf.float32)
 
-        _, sequence_features = tf.parse_single_sequence_example(
+        _, sequence_features = tf.io.parse_single_sequence_example(
             serialized_example, sequence_features=sequence_features)
 
         state_like_seqs = OrderedDict()
@@ -729,8 +729,8 @@ class VarLenFeatureVideoDataset(BaseVideoDataset):
     """
     def filter(self, serialized_example):
         features = dict()
-        features['sequence_length'] = tf.FixedLenFeature((), tf.int64)
-        features = tf.parse_single_example(serialized_example, features=features)
+        features['sequence_length'] = tf.io.FixedLenFeature((), tf.int64)
+        features = tf.io.parse_single_example(serialized_example, features=features)
         example_sequence_length = features['sequence_length']
         return tf.greater_equal(example_sequence_length, self.hparams.sequence_length)
 
@@ -739,16 +739,16 @@ class VarLenFeatureVideoDataset(BaseVideoDataset):
         Parses a single tf.train.SequenceExample into images, states, actions, etc tensors.
         """
         features = dict()
-        features['sequence_length'] = tf.FixedLenFeature((), tf.int64)
+        features['sequence_length'] = tf.io.FixedLenFeature((), tf.int64)
         for example_name, (name, shape) in self.state_like_names_and_shapes.items():
             if example_name == 'images':
-                features[name] = tf.VarLenFeature(tf.string)
+                features[name] = tf.io.VarLenFeature(tf.string)
             else:
-                features[name] = tf.VarLenFeature(tf.float32)
+                features[name] = tf.io.VarLenFeature(tf.float32)
         for example_name, (name, shape) in self.action_like_names_and_shapes.items():
-            features[name] = tf.VarLenFeature(tf.float32)
+            features[name] = tf.io.VarLenFeature(tf.float32)
 
-        features = tf.parse_single_example(serialized_example, features=features)
+        features = tf.io.parse_single_example(serialized_example, features=features)
 
         example_sequence_length = features['sequence_length']
 
@@ -756,13 +756,13 @@ class VarLenFeatureVideoDataset(BaseVideoDataset):
         action_like_seqs = OrderedDict()
         for example_name, (name, shape) in self.state_like_names_and_shapes.items():
             if example_name == 'images':
-                seq = tf.sparse_tensor_to_dense(features[name], '')
+                seq = tf.io.parse_tensor_to_dense(features[name], '')
             else:
-                seq = tf.sparse_tensor_to_dense(features[name])
+                seq = tf.io.sparse_tensor_to_dense(features[name])
                 seq = tf.reshape(seq, [example_sequence_length] + list(shape))
             state_like_seqs[example_name] = seq
         for example_name, (name, shape) in self.action_like_names_and_shapes.items():
-            seq = tf.sparse_tensor_to_dense(features[name])
+            seq = tf.io.sparse_tensor_to_dense(features[name])
             seq = tf.reshape(seq, [example_sequence_length - 1] + list(shape))
             action_like_seqs[example_name] = seq
 
