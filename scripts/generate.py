@@ -10,13 +10,8 @@ import random
 
 import cv2
 import numpy as np
-<<<<<<< HEAD
-import tensorflow.compat.v1 as tf
-from video_prediction import datasets, models
-=======
 import tensorflow as tf
-# from video_prediction import datasets, models
->>>>>>> 879bbd963dc8825d16d03dae3f43d3d675f766ce
+from video_prediction import datasets, models
 from video_prediction.utils.ffmpeg_gif import save_gif
 
 
