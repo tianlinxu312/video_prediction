@@ -90,8 +90,8 @@ class BaseVideoPredictionModel(object):
             repeat: the number of repeat actions (if applicable).
         """
         hparams = dict(
-            context_frames=-1,
-            sequence_length=-1,
+            context_frames=2,
+            sequence_length=28,
             repeat=1,
         )
         return hparams
