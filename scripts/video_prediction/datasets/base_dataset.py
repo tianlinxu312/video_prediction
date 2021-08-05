@@ -421,11 +421,6 @@ class BaseVideoDataset(object):
         else:
           parsed_hparams = self.get_default_hparams_dict()
         # parsed_hparams = self.override_from_dict(hparams_dict or {})
-        if hparams:
-            if not isinstance(hparams, (list, tuple)):
-                hparams = [hparams]
-            for hparam in hparams:
-                 parsed_hparams = self.parse(hparam)
         if not "long_sequence_length" in parsed_hparams:
             parsed_hparams["long_sequence_length" ] = parsed_hparams['sequence_length']
         return parsed_hparams
