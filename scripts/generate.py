@@ -11,7 +11,6 @@ import random
 import cv2
 import numpy as np
 import tensorflow as tf
-
 from video_prediction import datasets, models
 from video_prediction.utils.ffmpeg_gif import save_gif
 
@@ -51,7 +50,7 @@ def main():
     args = parser.parse_args()
 
     if args.seed is not None:
-        tf.set_random_seed(args.seed)
+        tf.random.set_seed(args.seed)
         np.random.seed(args.seed)
         random.seed(args.seed)
 
