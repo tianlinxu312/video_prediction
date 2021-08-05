@@ -287,6 +287,18 @@ class BaseVideoPredictionModel(object):
         self.eval_num_samples = eval_num_samples
         self.eval_num_samples_for_diversity = eval_num_samples_for_diversity
         self.eval_parallel_iterations = eval_parallel_iterations
+        
+        self._hparam_types = {}
+        if hparam_def:
+          self._init_from_proto(hparam_def)
+          if kwargs:
+            raise ValueError('hparam_def and initialization values are '
+                             'mutually exclusive')
+        else:
+          for name, value in six.iteritems(self.get_default_hparams_dict()):
+            self.add_hparam(name, value)
+
+            
         self.hparams = self.parse_hparams(hparams_dict, hparams)
         if self.hparams['context_frames'] == -1:
             raise ValueError('Invalid context_frames %r. It might have to be '
