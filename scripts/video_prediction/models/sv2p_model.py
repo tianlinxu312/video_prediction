@@ -574,7 +574,7 @@ def generator_fn(inputs, mode, hparams):
     actions = tf.unstack(actions, axis=0)
     states = inputs.get('states', tf.zeros([hparams['sequence_length'], batch_size, state_dim]))
     states = tf.unstack(states, axis=0)
-    iter_num = tf.to_float(tf.train.get_or_create_global_step())
+    iter_num = tf.cast(tf.train.get_or_create_global_step(), tf.float32)
 
     schedule_sampling_k = hparams['schedule_sampling_k'] if mode == 'train' else -1
     gen_images, gen_states = \
