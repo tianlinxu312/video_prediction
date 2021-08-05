@@ -103,7 +103,7 @@ def gif_summary(name, tensor, max_outputs=3, fps=10, collections=None,
   tensor = tf.convert_to_tensor(tensor)
   if skip_summary():
     return tf.constant("")
-  with tensorflow.python.distribute.summary_op_util.summary_scope(
+  with tf.python.distribute.summary_op_util.summary_scope(
       name, family, values=[tensor]) as (tag, scope):
     val = tf.py_func(
         py_gif_summary,
@@ -111,5 +111,5 @@ def gif_summary(name, tensor, max_outputs=3, fps=10, collections=None,
         tf.string,
         stateful=False,
         name=scope)
-    tensorflow.python.distribute.summary_op_util.collect(val, collections, [tf.GraphKeys.SUMMARIES])
+    tf.python.distribute.summary_op_util.collect(val, collections, [tf.GraphKeys.SUMMARIES])
   return val
