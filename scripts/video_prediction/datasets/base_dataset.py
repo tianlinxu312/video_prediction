@@ -573,7 +573,7 @@ class VideoDataset(BaseVideoDataset):
         state_like_names_and_shapes = OrderedDict([(k, list(v)) for k, v in self.state_like_names_and_shapes.items()])
         action_like_names_and_shapes = OrderedDict([(k, list(v)) for k, v in self.action_like_names_and_shapes.items()])
         from google.protobuf.json_format import MessageToDict
-        example = next(tf.python_io.tf_record_iterator(self.filenames[0]))
+        example = next(tf.compat.v1.python_io.tf_record_iterator(self.filenames[0]))
         self._dict_message = MessageToDict(tf.train.Example.FromString(example))
         for example_name, name_and_shape in (list(state_like_names_and_shapes.items()) +
                                              list(action_like_names_and_shapes.items())):
