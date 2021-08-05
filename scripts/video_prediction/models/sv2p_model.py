@@ -127,7 +127,7 @@ def kl_divergence(mu, log_sigma):
     return -.5 * tf.reduce_sum(1. + log_sigma - tf.square(mu) - tf.exp(log_sigma),
                                axis=1)
 
-
+@add_arg_scope
 def construct_latent_tower(images, hparams):
     """Builds convolutional latent tower for stochastic model.
 
