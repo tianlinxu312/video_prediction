@@ -285,7 +285,7 @@ def construct_model(images,
                 dtype=tf.float32)
         else:
             # batch_size x latent_size
-            samples = tf.random_normal(latent_shape, 0, 1, dtype=tf.float32)
+            samples = tf.random.normal(latent_shape, 0, 1, dtype=tf.float32)
 
     # Main tower
     for t in range(hparams['sequence_length'] - 1):
