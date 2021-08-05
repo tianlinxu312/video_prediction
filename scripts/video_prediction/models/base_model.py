@@ -51,12 +51,12 @@ class BaseVideoPredictionModel(object):
         self.eval_num_samples_for_diversity = eval_num_samples_for_diversity
         self.eval_parallel_iterations = eval_parallel_iterations
         self.hparams = self.parse_hparams(hparams_dict, hparams)
-        if self.hparams.context_frames == -1:
+        if self.hparams['context_frames'] == -1:
             raise ValueError('Invalid context_frames %r. It might have to be '
-                             'specified.' % self.hparams.context_frames)
-        if self.hparams.sequence_length == -1:
+                             'specified.' % self.hparams['context_frames'])
+        if self.hparams['sequence_length'] == -1:
             raise ValueError('Invalid sequence_length %r. It might have to be '
-                             'specified.' % self.hparams.sequence_length)
+                             'specified.' % self.hparams'sequence_length'] )
 
         # should be overriden by descendant class if the model is stochastic
         self.deterministic = True
@@ -115,7 +115,7 @@ class BaseVideoPredictionModel(object):
     def metrics_fn(self, inputs, outputs):
         metrics = OrderedDict()
         sequence_length = tf.shape(inputs['images'])[0]
-        context_frames = self.hparams.context_frames
+        context_frames = self.hparams['context_frames']
         future_length = sequence_length - context_frames
         # target_images and pred_images include only the future frames
         target_images = inputs['images'][-future_length:]
