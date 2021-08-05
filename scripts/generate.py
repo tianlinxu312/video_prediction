@@ -11,13 +11,14 @@ import random
 import cv2
 import numpy as np
 import tensorflow as tf
-from video_prediction import datasets, models
+# from video_prediction import datasets, models
 from video_prediction.utils.ffmpeg_gif import save_gif
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", type=str, required=True, help="either a directory containing subdirectories "
+    parser.add_argument("--input_dir", type=str, default="../tensorflow_datasets/bair_robot_pushing_small",
+                        help="either a directory containing subdirectories "
                                                                      "train, val, test, etc, or a directory containing "
                                                                      "the tfrecords")
     parser.add_argument("--results_dir", type=str, default='results', help="ignored if output_gif_dir is specified")
@@ -27,7 +28,8 @@ def main():
                                                  "results_gif_dir/model_fname")
     parser.add_argument("--output_png_dir", help="output directory where samples are saved as pngs. default is "
                                                  "results_png_dir/model_fname")
-    parser.add_argument("--checkpoint", help="directory with checkpoint or checkpoint name (e.g. checkpoint_dir/model-200000)")
+    parser.add_argument("--checkpoint", default="../pretrained_models/bair_action_free/ours_savp",
+                        help="directory with checkpoint or checkpoint name (e.g. checkpoint_dir/model-200000)")
 
     parser.add_argument("--mode", type=str, choices=['val', 'test'], default='val', help='mode for dataset, val or test.')
 
@@ -54,6 +56,8 @@ def main():
         np.random.seed(args.seed)
         random.seed(args.seed)
 
+    layer_norm = tf.compat.v1.keras.layers.LayerNormalization(axis=-1, name='ln')
+
     args.results_gif_dir = args.results_gif_dir or args.results_dir
     args.results_png_dir = args.results_png_dir or args.results_dir
     dataset_hparams_dict = {}
@@ -62,8 +66,6 @@ def main():
         checkpoint_dir = os.path.normpath(args.checkpoint)
         if not os.path.isdir(args.checkpoint):
             checkpoint_dir, _ = os.path.split(checkpoint_dir)
-        if not os.path.exists(checkpoint_dir):
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), checkpoint_dir)
         with open(os.path.join(checkpoint_dir, "options.json")) as f:
             print("loading options from checkpoint %s" % args.checkpoint)
             options = json.loads(f.read())
