@@ -238,7 +238,7 @@ def add_gif_summaries(outputs, max_outputs=8, collections=None):
                 if output.shape[-1] not in (1, 3):
                     # these are feature maps, so just skip them
                     continue
-                gif_summary.gif_summary(name, output[None], fps=4, collections=collections)
+                # gif_summary.gif_summary(name, output[None], fps=4, collections=collections)
 
 
 def add_scalar_summaries(losses_or_metrics, collections=None):
@@ -265,7 +265,7 @@ def add_summaries(outputs, collections=None):
             gif_outputs[name] = output
     add_scalar_summaries(scalar_outputs, collections=collections)
     add_image_summaries(image_outputs, collections=collections)
-    add_gif_summaries(gif_outputs, collections=collections)
+    # add_gif_summaries(gif_outputs, collections=collections)
 
 
 def plot_buf(y):
