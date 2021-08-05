@@ -610,37 +610,39 @@ class VideoPredictionModel(BaseVideoPredictionModel):
         self.generator_scope = generator_scope
         self.discriminator_scope = discriminator_scope
         self.aggregate_nccl = aggregate_nccl
-
-        if any(self.hparams['lr_boundaries']):
-            global_step = tf.train.get_or_create_global_step()
-            lr_values = list(self.hparams.lr * 0.1 ** np.arange(len(self.hparams.lr_boundaries) + 1))
-            self.learning_rate = tf.train.piecewise_constant(global_step, self.hparams.lr_boundaries, lr_values)
-        elif any(self.hparams.decay_steps):
-            lr, end_lr = self.hparams.lr, self.hparams.end_lr
-            start_step, end_step = self.hparams.decay_steps
-            if start_step == end_step:
-                schedule = tf.cond(tf.less(tf.train.get_or_create_global_step(), start_step),
-                                   lambda: 0.0, lambda: 1.0)
+        
+        if 'lr_boundaries' in self.hparams:
+            if any(self.hparams['lr_boundaries']):
+                global_step = tf.train.get_or_create_global_step()
+                lr_values = list(self.hparams.lr * 0.1 ** np.arange(len(self.hparams.lr_boundaries) + 1))
+                self.learning_rate = tf.train.piecewise_constant(global_step, self.hparams.lr_boundaries, lr_values)
+            elif any(self.hparams['decay_steps']):
+                lr, end_lr = self.hparams['lr'], self.hparams.['end_lr']
+                start_step, end_step = self.hparams['decay_steps']
+                if start_step == end_step:
+                    schedule = tf.cond(tf.less(tf.train.get_or_create_global_step(), start_step),
+                                       lambda: 0.0, lambda: 1.0)
+                else:
+                    step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
+                    schedule = tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
+                self.learning_rate = lr + (end_lr - lr) * schedule
             else:
-                step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
-                schedule = tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
-            self.learning_rate = lr + (end_lr - lr) * schedule
-        else:
-            self.learning_rate = self.hparams.lr
-
-        if self.hparams.kl_weight:
-            if self.hparams.kl_anneal == 'none':
-                self.kl_weight = tf.constant(self.hparams.kl_weight, tf.float32)
-            elif self.hparams.kl_anneal == 'sigmoid':
-                k = self.hparams.kl_anneal_k
+                self.learning_rate = self.hparams.lr
+                
+        if 'kl_weight' in self.hparams:
+            if self.hparams['kl_weight']:
+            if self.hparams['kl_anneal'] == 'none':
+                self.kl_weight = tf.constant(self.hparams['kl_weight'], tf.float32)
+            elif self.hparams['kl_anneal'] == 'sigmoid':
+                k = self.hparams['kl_anneal_k'] 
                 if k == -1.0:
                     raise ValueError('Invalid kl_anneal_k %d when kl_anneal is sigmoid.' % k)
                 iter_num = tf.train.get_or_create_global_step()
-                self.kl_weight = self.hparams.kl_weight / (1 + k * tf.exp(-tf.to_float(iter_num) / k))
-            elif self.hparams.kl_anneal == 'linear':
-                start_step, end_step = self.hparams.kl_anneal_steps
+                self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.to_float(iter_num) / k))
+            elif self.hparams['kl_anneal']  == 'linear':
+                start_step, end_step = self.hparams['kl_anneal_steps'] 
                 step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
-                self.kl_weight = self.hparams.kl_weight * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
+                self.kl_weight = self.hparams['kl_weight'] * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
             else:
                 raise NotImplementedError
         else:
