@@ -19,8 +19,7 @@ from __future__ import print_function
 
 import numpy as np
 import tensorflow as tf
-# from tensorflow.python.ops import summary_op_util
-from tensorflow.python.distribute.summary_op_util import skip_summary
+from tensorflow.python.ops import summary_op_util
 
 from video_prediction.utils import ffmpeg_gif
 
@@ -101,9 +100,9 @@ def gif_summary(name, tensor, max_outputs=3, fps=10, collections=None,
     buffer.
   """
   tensor = tf.convert_to_tensor(tensor)
-  if skip_summary():
+  if summary_op_util.skip_summary():
     return tf.constant("")
-  with tf.python.distribute.summary_op_util.summary_scope(
+  with summary_op_util.summary_scope(
       name, family, values=[tensor]) as (tag, scope):
     val = tf.py_func(
         py_gif_summary,
@@ -111,5 +110,5 @@ def gif_summary(name, tensor, max_outputs=3, fps=10, collections=None,
         tf.string,
         stateful=False,
         name=scope)
-    tf.python.distribute.summary_op_util.collect(val, collections, [tf.GraphKeys.SUMMARIES])
+    summary_op_util.collect(val, collections, [tf.GraphKeys.SUMMARIES])
   return val
