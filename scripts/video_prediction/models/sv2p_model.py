@@ -29,7 +29,7 @@ from tf_slim import layers
 from video_prediction.models import VideoPredictionModel
 
 
-layer_norm = tf_layers.batch_normalisation
+layer_norm = tf_layers.batch_normalization
 
 
 def init_state(inputs,
