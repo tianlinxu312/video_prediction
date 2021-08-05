@@ -467,7 +467,7 @@ class BaseVideoDataset(object):
             return seqs
 
         num_parallel_calls = None if shuffle else 1  # for reproducibility (e.g. sampled subclips from the test set)
-        dataset = dataset.apply(tf.contrib.data.map_and_batch(
+        dataset = dataset.apply(tf.data.experimental.map_and_batch(
             _parser, batch_size, drop_remainder=True, num_parallel_calls=num_parallel_calls))
         dataset = dataset.prefetch(batch_size)
         return dataset
