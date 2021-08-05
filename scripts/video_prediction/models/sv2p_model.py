@@ -28,9 +28,8 @@ from tf_slim import add_arg_scope
 from tf_slim import layers
 from video_prediction.models import VideoPredictionModel
 
-@add_arg_scope
-def layer_norm():
-  return tf.compat.v1.layers.batch_normalization
+
+layer_norm = tf_layers.batch_normalisation
 
 
 def init_state(inputs,
