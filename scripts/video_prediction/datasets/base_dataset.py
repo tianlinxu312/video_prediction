@@ -34,6 +34,7 @@ class BaseVideoDataset(object):
         self.mode = mode
         self.num_epochs = num_epochs
         self.seed = seed
+        self._hparam_types = {}
 
         if self.mode not in ('train', 'val', 'test'):
             raise ValueError('Invalid mode %s' % self.mode)
@@ -99,6 +100,21 @@ class BaseVideoDataset(object):
 
     # def get_default_hparams(self):
     #     return HParams(**self.get_default_hparams_dict())
+    
+    def add_hparam(self, name, value):
+    # Keys in kwargs are unique, but 'name' could the name of a pre-existing
+    # attribute of this object.  In that case we refuse to use it as a
+    # hyperparameter name.
+        if getattr(self, name, None) is not None:
+          raise ValueError('Hyperparameter name is reserved: %s' % name)
+        if isinstance(value, (list, tuple)):
+          if not value:
+            raise ValueError(
+                'Multi-valued hyperparameters cannot be empty: %s' % name)
+          self._hparam_types[name] = (type(value[0]), True)
+        else:
+          self._hparam_types[name] = (type(value), False)
+        setattr(self, name, value)
     
     def set_hparam(self, name, value):
         """Set the value of an existing hyperparameter.
