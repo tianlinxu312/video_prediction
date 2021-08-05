@@ -269,25 +269,25 @@ def construct_model(images,
     lstm_state5, lstm_state6, lstm_state7 = None, None, None
 
     # Latent tower
-    if hparams.stochastic_model:
-        latent_shape = [batch_size, img_height // 8, img_width // 8, hparams.latent_channels]
+    if hparams['stochastic_model']:
+        latent_shape = [batch_size, img_height // 8, img_width // 8, hparams['latent_channels']]
         if outputs_enc is None:  # equivalent to inference_time
             latent_mean, latent_std = None, None
         else:
             latent_mean, latent_std = outputs_enc['zs_mu_enc'], outputs_enc['zs_log_sigma_sq_enc']
             assert latent_mean.shape.as_list() == latent_shape
 
-        if hparams.multi_latent:
+        if hparams['multi_latent']:
             # timestep x batch_size x latent_size
             samples = tf.random_normal(
-                [hparams.sequence_length - 1] + latent_shape, 0, 1,
+                [hparams['sequence_length'] - 1] + latent_shape, 0, 1,
                 dtype=tf.float32)
         else:
             # batch_size x latent_size
             samples = tf.random_normal(latent_shape, 0, 1, dtype=tf.float32)
 
     # Main tower
-    for t in range(hparams.sequence_length - 1):
+    for t in range(hparams['sequence_length'] - 1):
         action = actions[t]
         # Reuse variables after the first timestep.
         reuse = bool(gen_images)
@@ -347,12 +347,12 @@ def construct_model(images,
             if use_state:
                 enc2 = tf.concat(axis=3, values=[enc2, smear])
             # Setup latent
-            if hparams.stochastic_model:
+            if hparams['stochastic_model']:
                 latent = samples
-                if hparams.multi_latent:
+                if hparams['multi_latent']:
                     latent = samples[t]
                 if outputs_enc is not None:  # equivalent to not inference_time
-                    latent = tf.cond(iter_num < hparams.num_iterations_1st_stage,
+                    latent = tf.cond(iter_num < hparams['num_iterations_1st_stage'],
                                      lambda: tf.identity(latent),
                                      lambda: latent_mean + tf.exp(latent_std / 2.0) * latent)
                 with tf.control_dependencies([latent]):
