@@ -35,7 +35,6 @@ class BaseVideoDataset(object):
         self.num_epochs = num_epochs
         self.seed = seed
         self._hparam_types = {}
-        self._model_structure = model_structure
         if hparam_def:
           self._init_from_proto(hparam_def)
           if kwargs:
