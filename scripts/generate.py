@@ -62,8 +62,6 @@ def main():
         checkpoint_dir = os.path.normpath(args.checkpoint)
         if not os.path.isdir(args.checkpoint):
             checkpoint_dir, _ = os.path.split(checkpoint_dir)
-        if not os.path.exists(checkpoint_dir):
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), checkpoint_dir)
         with open(os.path.join(checkpoint_dir, "options.json")) as f:
             print("loading options from checkpoint %s" % args.checkpoint)
             options = json.loads(f.read())
