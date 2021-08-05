@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 import numpy as np
 import six
-import tensorflow as tf
+import tensorflowtf.compat.v1. as tf
 # from tensorflow.contrib.training import HParams
 from tensorflow.python.util import nest
 
