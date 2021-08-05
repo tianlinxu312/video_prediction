@@ -149,24 +149,21 @@ def construct_latent_tower(images, hparams):
             32, [3, 3],
             stride=2,
             scope='latent_conv1',
-            normalizer_fn=layer_norm,
-            normalizer_params={'scope': 'latent_norm1'})
+            normalizer_fn=layer_norm)
 
         latent_enc2 = slim.conv2d(
             latent_enc1,
             64, [3, 3],
             stride=2,
             scope='latent_conv2',
-            normalizer_fn=layer_norm,
-            normalizer_params={'scope': 'latent_norm2'})
+            normalizer_fn=layer_norm)
 
         latent_enc3 = slim.conv2d(
             latent_enc2,
             64, [3, 3],
             stride=1,
             scope='latent_conv3',
-            normalizer_fn=layer_norm,
-            normalizer_params={'scope': 'latent_norm3'})
+            normalizer_fn=layer_norm)
 
         latent_mean = slim.conv2d(
             latent_enc3,
@@ -174,16 +171,14 @@ def construct_latent_tower(images, hparams):
             stride=2,
             activation_fn=None,
             scope='latent_mean',
-            normalizer_fn=layer_norm,
-            normalizer_params={'scope': 'latent_norm_mean'})
+            normalizer_fn=layer_norm)
 
         latent_std = slim.conv2d(
             latent_enc3,
             hparams['latent_channels'], [3, 3],
             stride=2,
             scope='latent_std',
-            normalizer_fn=layer_norm,
-            normalizer_params={'scope': 'latent_std_norm'})
+            normalizer_fn=layer_norm)
 
         latent_std += hparams['latent_std_min']
 
@@ -311,24 +306,23 @@ def construct_model(images,
                 32, [5, 5],
                 stride=2,
                 scope='scale1_conv1',
-                normalizer_fn=layer_norm,
-                normalizer_params={'scope': 'layer_norm1'})
+                normalizer_fn=layer_norm)
 
             hidden1, lstm_state1 = lstm_func(
                 enc0, lstm_state1, lstm_size[0], scope='state1')
-            hidden1 = layer_norm(hidden1, scope='layer_norm2')
+            hidden1 = layer_norm(hidden1)
             hidden2, lstm_state2 = lstm_func(
                 hidden1, lstm_state2, lstm_size[1], scope='state2')
-            hidden2 = layer_norm(hidden2, scope='layer_norm3')
+            hidden2 = layer_norm(hidden2)
             enc1 = slim.layers.conv2d(
                 hidden2, hidden2.get_shape()[3], [3, 3], stride=2, scope='conv2')
 
             hidden3, lstm_state3 = lstm_func(
                 enc1, lstm_state3, lstm_size[2], scope='state3')
-            hidden3 = layer_norm(hidden3, scope='layer_norm4')
+            hidden3 = layer_norm(hidden3)
             hidden4, lstm_state4 = lstm_func(
                 hidden3, lstm_state4, lstm_size[3], scope='state4')
-            hidden4 = layer_norm(hidden4, scope='layer_norm5')
+            hidden4 = layer_norm(hidden4)
             enc2 = slim.layers.conv2d(
                 hidden4, hidden4.get_shape()[3], [3, 3], stride=2, scope='conv3')
 
@@ -357,13 +351,13 @@ def construct_model(images,
 
             hidden5, lstm_state5 = lstm_func(
                 enc3, lstm_state5, lstm_size[4], scope='state5')  # last 8x8
-            hidden5 = layer_norm(hidden5, scope='layer_norm6')
+            hidden5 = layer_norm(hidden5)
             enc4 = slim.layers.conv2d_transpose(
                 hidden5, hidden5.get_shape()[3], 3, stride=2, scope='convt1')
 
             hidden6, lstm_state6 = lstm_func(
                 enc4, lstm_state6, lstm_size[5], scope='state6')  # 16x16
-            hidden6 = layer_norm(hidden6, scope='layer_norm7')
+            hidden6 = layer_norm(hidden6)
             # Skip connection.
             hidden6 = tf.concat(axis=3, values=[hidden6, enc1])  # both 16x16
 
@@ -371,7 +365,7 @@ def construct_model(images,
                 hidden6, hidden6.get_shape()[3], 3, stride=2, scope='convt2')
             hidden7, lstm_state7 = lstm_func(
                 enc5, lstm_state7, lstm_size[6], scope='state7')  # 32x32
-            hidden7 = layer_norm(hidden7, scope='layer_norm8')
+            hidden7 = layer_norm(hidden7)
 
             # Skip connection.
             hidden7 = tf.concat(axis=3, values=[hidden7, enc0])  # both 32x32
@@ -379,8 +373,7 @@ def construct_model(images,
             enc6 = slim.layers.conv2d_transpose(
                 hidden7,
                 hidden7.get_shape()[3], 3, stride=2, scope='convt3', activation_fn=None,
-                normalizer_fn=layer_norm,
-                normalizer_params={'scope': 'layer_norm9'})
+                normalizer_fn=layer_norm)
 
             if dna:
                 # Using largest hidden state for predicting untied conv kernels.
