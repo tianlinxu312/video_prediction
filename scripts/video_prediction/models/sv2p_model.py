@@ -37,7 +37,7 @@ RELU_SHIFT = 1e-12
 # kernel size for DNA and CDNA.
 DNA_KERN_SIZE = 5
 
-@add_arg_scope
+@slim.add_arg_scope
 layer_norm = tf.keras.layers.LayerNormalization(axis=-1, name='ln')
 
 
@@ -65,7 +65,7 @@ def init_state(inputs,
     return initial_state
 
 
-@add_arg_scope
+@slim.add_arg_scope
 def basic_conv_lstm_cell(inputs,
                          state,
                          num_channels,
