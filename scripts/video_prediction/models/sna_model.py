@@ -19,10 +19,14 @@ import itertools
 
 import numpy as np
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
-from tensorflow.contrib.layers.python import layers as tf_layers
-from tensorflow.contrib.slim import add_arg_scope
-from tensorflow.contrib.slim import layers
+# import tensorflow.contrib.slim as slim
+import tf_slim as slim
+from tensorflow.compact.v1 import layers as tf_layers
+# from tensorflow.contrib.slim import add_arg_scope
+# from tensorflow.contrib.slim import layers
+
+from tf_slim import add_arg_scope
+from tf_slim import layers
 
 from video_prediction.models import VideoPredictionModel
 
