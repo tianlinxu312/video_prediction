@@ -99,15 +99,73 @@ class BaseVideoDataset(object):
 
     # def get_default_hparams(self):
     #     return HParams(**self.get_default_hparams_dict())
+    
+    def set_hparam(self, name, value):
+        """Set the value of an existing hyperparameter.
+        This function verifies that the type of the value matches the type of the
+        existing hyperparameter.
+        Args:
+          name: Name of the hyperparameter.
+          value: New value of the hyperparameter.
+        Raises:
+          ValueError: If there is a type mismatch.
+        """
+        param_type, is_list = self._hparam_types[name]
+        if isinstance(value, list):
+          if not is_list:
+            raise ValueError(
+                'Must not pass a list for single-valued parameter: %s' % name)
+          setattr(self, name, [
+              _cast_to_type_if_compatible(name, param_type, v) for v in value])
+        else:
+          if is_list:
+            raise ValueError(
+                'Must pass a list for multi-valued parameter: %s.' % name)
+          setattr(self, name, _cast_to_type_if_compatible(name, param_type, value))
+    
+    def parse(self, values):
+        """Override hyperparameter values, parsing new values from a string.
+        See parse_values for more detail on the allowed format for values.
+        Args:
+          values: String.  Comma separated list of `name=value` pairs where
+            'value' must follow the syntax described above.
+        Returns:
+          The `HParams` instance.
+        Raises:
+          ValueError: If `values` cannot be parsed.
+        """
+        type_map = dict()
+        for name, t in self._hparam_types.items():
+          param_type, _ = t
+          type_map[name] = param_type
+
+        values_map = parse_values(values, type_map)
+        return self.override_from_dict(values_map)
+    
+
+    def override_from_dict(self, values_dict):
+        """Override hyperparameter values, parsing new values from a dictionary.
+        Args:
+           values_dict: Dictionary of name:value pairs.
+        Returns:
+          The `HParams` instance.
+        Raises:
+          ValueError: If `values_dict` cannot be parsed.
+        """
+        for name, value in values_dict.items():
+          self.set_hparam(name, value)
+        return self
+    
 
     def parse_hparams(self, hparams_dict, hparams):
         # parsed_hparams = self.get_default_hparams().override_from_dict(hparams_dict or {})
-        parsed_hparams = self.get_default_hparams_dict()
+        hparams = self.get_default_hparams_dict()
+        parsed_hparams = self.override_from_dict(hparams_dict or {})
         if hparams:
             if not isinstance(hparams, (list, tuple)):
                 hparams = [hparams]
             for hparam in hparams:
-                parsed_hparams.parse(hparam)
+                 parsed_hparams.parse(hparam)
         if parsed_hparams.long_sequence_length == 0:
             parsed_hparams.long_sequence_length = parsed_hparams.sequence_length
         return parsed_hparams
