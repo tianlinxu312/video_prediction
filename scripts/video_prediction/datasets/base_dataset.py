@@ -468,7 +468,7 @@ class BaseVideoDataset(object):
 
     def make_batch(self, batch_size):
         dataset = self.make_dataset(batch_size)
-        iterator = dataset.make_one_shot_iterator()
+        iterator = tf.compat.v1.data.make_one_shot_iterator(dataset)
         return iterator.get_next()
 
     def decode_and_preprocess_images(self, image_buffers, image_shape):
