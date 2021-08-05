@@ -6,7 +6,7 @@ from collections import OrderedDict
 
 import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.training import HParams
+# from tensorflow.contrib.training import HParams
 from tensorflow.python.util import nest
 
 import video_prediction as vp
@@ -96,11 +96,12 @@ class BaseVideoPredictionModel(object):
         )
         return hparams
 
-    def get_default_hparams(self):
-        return HParams(**self.get_default_hparams_dict())
+    # def get_default_hparams(self):
+    #     return HParams(**self.get_default_hparams_dict())
 
     def parse_hparams(self, hparams_dict, hparams):
-        parsed_hparams = self.get_default_hparams().override_from_dict(hparams_dict or {})
+        # parsed_hparams = self.get_default_hparams().override_from_dict(hparams_dict or {})
+        parsed_hparams = self.get_default_hparams_dict()
         if hparams:
             if not isinstance(hparams, (list, tuple)):
                 hparams = [hparams]
