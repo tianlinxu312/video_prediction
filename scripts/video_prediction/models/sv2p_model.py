@@ -36,7 +36,7 @@ RELU_SHIFT = 1e-12
 # kernel size for DNA and CDNA.
 DNA_KERN_SIZE = 5
 
-layer_norm = tf.keras.layers.LayerNormalization(axis = -1)
+layer_norm = tf.compat.v1.keras.layers.LayerNormalization(axis = -1)
 
 
 def init_state(inputs,
