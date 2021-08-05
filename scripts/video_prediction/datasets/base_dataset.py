@@ -515,7 +515,7 @@ class BaseVideoDataset(object):
         sequence_length = self.hparams['sequence_length']  # desired sequence length
         frame_skip = self.hparams['frame_skip']
         time_shift = self.hparams['time_shift']
-        if (time_shift and self.mode == 'train') or self.hparams.force_time_shift:
+        if (time_shift and self.mode == 'train') or self.hparams['force_time_shift']:
             assert time_shift > 0 and isinstance(time_shift, int)
             if isinstance(example_sequence_length, tf.Tensor):
                 example_sequence_length = tf.cast(example_sequence_length, tf.int32)
@@ -620,12 +620,12 @@ class VideoDataset(BaseVideoDataset):
 
         # set sequence_length to the longest possible if it is not specified
         if not self.hparams['sequence_length']:
-            self.hparams['sequence_length'] = (self._max_sequence_length - 1) // (self.hparams.frame_skip + 1) + 1
+            self.hparams['sequence_length'] = (self._max_sequence_length - 1) // (self.hparams['frame_skip'] + 1) + 1
 
     def set_sequence_length(self, sequence_length):
         if not sequence_length:
             sequence_length = (self._max_sequence_length - 1) // (self.hparams['frame_skip'] + 1) + 1
-        self.hparams.sequence_length = sequence_length
+        self.hparams['sequence_length'] = sequence_length
 
     def parser(self, serialized_example):
         """
