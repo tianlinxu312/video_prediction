@@ -481,12 +481,12 @@ class BaseVideoDataset(object):
         def decode_and_preprocess_image(image_buffer):
             image_buffer = tf.reshape(image_buffer, [])
             if self.jpeg_encoding:
-                image = tf.image.decode_jpeg(image_buffer)
+                image = tf.io.decode_jpeg(image_buffer)
             else:
-                image = tf.decode_raw(image_buffer, tf.uint8)
+                image = tf.io.decode_raw(image_buffer, tf.uint8)
             image = tf.reshape(image, image_shape)
-            crop_size = self.hparams.crop_size
-            scale_size = self.hparams.scale_size
+            crop_size = self.hparams['crop_size']
+            scale_size = self.hparams['scale_size']
             if crop_size or scale_size:
                 if not crop_size:
                     crop_size = min(image_shape[0], image_shape[1])
@@ -518,9 +518,9 @@ class BaseVideoDataset(object):
         in-place and the same dicts are returned.
         """
         # handle random shifting and frame skip
-        sequence_length = self.hparams.sequence_length  # desired sequence length
-        frame_skip = self.hparams.frame_skip
-        time_shift = self.hparams.time_shift
+        sequence_length = self.hparams['sequence_length']  # desired sequence length
+        frame_skip = self.hparams['frame_skip']
+        time_shift = self.hparams['time_shift']
         if (time_shift and self.mode == 'train') or self.hparams.force_time_shift:
             assert time_shift > 0 and isinstance(time_shift, int)
             if isinstance(example_sequence_length, tf.Tensor):
