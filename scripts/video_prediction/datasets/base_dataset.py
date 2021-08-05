@@ -13,7 +13,7 @@ import tensorflow as tf
 
 class BaseVideoDataset(object):
     def __init__(self, input_dir, mode='train', num_epochs=None, seed=None,
-                 hparams_dict=None, hparams=None):
+                 hparams_dict=None, hparams=None, hparam_def=None):
         """
         Args:
             input_dir: either a directory containing subdirectories train,
