@@ -427,8 +427,8 @@ class BaseVideoDataset(object):
                 hparams = [hparams]
             for hparam in hparams:
                  parsed_hparams = self.parse(hparam)
-        if parsed_hparams.long_sequence_length == 0:
-            parsed_hparams.long_sequence_length = parsed_hparams.sequence_length
+        if not "long_sequence_length" in parsed_hparams:
+            parsed_hparams["long_sequence_length" ] = parsed_hparams['sequence_length']
         return parsed_hparams
 
     @property
