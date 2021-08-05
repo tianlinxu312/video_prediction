@@ -56,7 +56,7 @@ class BaseVideoPredictionModel(object):
                              'specified.' % self.hparams['context_frames'])
         if self.hparams['sequence_length'] == -1:
             raise ValueError('Invalid sequence_length %r. It might have to be '
-                             'specified.' % self.hparams'sequence_length'] )
+                             'specified.' % self.hparams['sequence_length'] )
 
         # should be overriden by descendant class if the model is stochastic
         self.deterministic = True
