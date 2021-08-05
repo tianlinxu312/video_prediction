@@ -30,7 +30,7 @@ from video_prediction.models import VideoPredictionModel
 
 @add_arg_scope
 def layer_norm():
-  return tf.compat.v1.layers.batch_normalization(axis=0)
+  return tf.compat.v1.layers.batch_normalization
 
 
 def init_state(inputs,
