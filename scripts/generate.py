@@ -50,7 +50,6 @@ def main():
     args = parser.parse_args()
 
     if args.seed is not None:
-        tf.random.set_seed(args.seed)
         np.random.seed(args.seed)
         random.seed(args.seed)
 
