@@ -245,7 +245,7 @@ class LayerNormalization(Layer):
         'beta_regularizer': regularizers.serialize(self.beta_regularizer),
         'gamma_regularizer': regularizers.serialize(self.gamma_regularizer),
         'beta_constraint': constraints.serialize(self.beta_constraint),
-        'gamma_constraint': constraints.serialize(self.gamma_constraint)
+        'gamma_constraint': constraints.serialize(self.gamma_constraint),
         'reuse': self.reuse
     }
     base_config = super(LayerNormalization, self).get_config()
