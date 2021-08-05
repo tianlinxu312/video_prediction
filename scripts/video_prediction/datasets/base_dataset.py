@@ -140,13 +140,10 @@ class BaseVideoDataset(object):
           if not is_list:
             raise ValueError(
                 'Must not pass a list for single-valued parameter: %s' % name)
-          setattr(self, name, [
-              _cast_to_type_if_compatible(name, param_type, v) for v in value])
         else:
           if is_list:
             raise ValueError(
                 'Must pass a list for multi-valued parameter: %s.' % name)
-          setattr(self, name, _cast_to_type_if_compatible(name, param_type, value))
     
     def parse(self, values):
         """Override hyperparameter values, parsing new values from a string.
