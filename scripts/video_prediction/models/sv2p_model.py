@@ -27,6 +27,7 @@ from tensorflow.compat.v1 import layers as tf_layers
 from tf_slim import add_arg_scope
 from tf_slim import layers
 
+arg_scope = tf_slim.arg_scope
 from video_prediction.models import VideoPredictionModel
 
 
@@ -36,7 +37,8 @@ RELU_SHIFT = 1e-12
 # kernel size for DNA and CDNA.
 DNA_KERN_SIZE = 5
 
-layer_norm = tf.compat.v1.keras.layers.LayerNormalization(axis=-1, name='ln')
+@tf_slim.add_arg_scope
+layer_norm = tf.keras.layers.LayerNormalization(axis=-1, name='ln')
 
 
 def init_state(inputs,
@@ -63,7 +65,7 @@ def init_state(inputs,
     return initial_state
 
 
-@add_arg_scope
+@tf_slim.add_arg_scope
 def basic_conv_lstm_cell(inputs,
                          state,
                          num_channels,
