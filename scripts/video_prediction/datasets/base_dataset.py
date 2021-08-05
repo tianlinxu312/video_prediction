@@ -35,6 +35,15 @@ class BaseVideoDataset(object):
         self.num_epochs = num_epochs
         self.seed = seed
         self._hparam_types = {}
+        self._model_structure = model_structure
+        if hparam_def:
+          self._init_from_proto(hparam_def)
+          if kwargs:
+            raise ValueError('hparam_def and initialization values are '
+                             'mutually exclusive')
+        else:
+          for name, value in six.iteritems(kwargs):
+            self.add_hparam(name, value)
 
         if self.mode not in ('train', 'val', 'test'):
             raise ValueError('Invalid mode %s' % self.mode)
