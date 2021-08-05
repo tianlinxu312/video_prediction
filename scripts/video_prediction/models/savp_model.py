@@ -4,7 +4,9 @@ import itertools
 from collections import OrderedDict
 
 import numpy as np
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from tensorflow.python.util import nest
 
 from video_prediction import ops, flow_ops
