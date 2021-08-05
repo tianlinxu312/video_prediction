@@ -641,7 +641,7 @@ class VideoPredictionModel(BaseVideoPredictionModel):
                     self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.to_float(iter_num) / k))
                 elif self.hparams['kl_anneal']  == 'linear':
                     start_step, end_step = self.hparams['kl_anneal_steps'] 
-                    step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
+                    step = tf.clip_by_value(tf.compat.v1.train.get_or_create_global_step(), start_step, end_step)
                     self.kl_weight = self.hparams['kl_weight'] * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
                 else:
                     raise NotImplementedError
