@@ -5,7 +5,8 @@ from collections import OrderedDict
 import numpy as np
 import six
 import tensorflow as tf
-import tensorflow.contrib.graph_editor as ge
+# import tensorflow.contrib.graph_editor as ge
+import graph_def_editor as gde
 from tensorflow.core.framework import node_def_pb2
 from tensorflow.python.framework import device as pydev
 from tensorflow.python.training import device_setter
