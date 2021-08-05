@@ -113,8 +113,8 @@ def main():
         hparams_dict=hparams_dict,
         hparams=args.model_hparams)
 
-    sequence_length = model.hparams.sequence_length
-    context_frames = model.hparams.context_frames
+    sequence_length = model.hparams['sequence_length']
+    context_frames = model.hparams['context_frames']
     future_length = sequence_length - context_frames
 
     if args.num_samples:
