@@ -20,7 +20,7 @@ from __future__ import print_function
 import numpy as np
 import tensorflow as tf
 # from tensorflow.python.ops import summary_op_util
-from tensorflow.python.distribute.summary_op_util import skip_summary
+from tensorflow.python.distribute.summary_op_util import skip_summary, summary_scope
 
 from video_prediction.utils import ffmpeg_gif
 
