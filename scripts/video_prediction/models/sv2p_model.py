@@ -83,7 +83,7 @@ def basic_conv_lstm_cell(inputs,
     spatial_size = inputs.get_shape()[1:3]
     if state is None:
         state = init_state(inputs, list(spatial_size) + [2 * num_channels])
-    with tf.variable_scope(scope,
+    with tf.compat.v1.variable_scope(scope,
                            'BasicConvLstmCell',
                            [inputs, state],
                            reuse=reuse):
@@ -584,7 +584,7 @@ def generator_fn(inputs, mode, hparams):
 
     if mode == 'train':
         outputs_enc = encoder_fn(inputs, hparams)
-        tf.get_variable_scope().reuse_variables()
+        tf.compat.v1.get_variable_scope().reuse_variables()
         gen_images_enc, gen_states_enc = \
             construct_model(images,
                             actions,
