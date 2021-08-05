@@ -2,7 +2,6 @@
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
@@ -176,7 +175,7 @@ def construct_latent_tower(images, hparams):
 
         latent_mean = slim.conv2d(
             latent_enc3,
-            hparams.latent_channels, [3, 3],
+            hparams['latent_channels'], [3, 3],
             stride=2,
             activation_fn=None,
             scope='latent_mean',
@@ -185,13 +184,13 @@ def construct_latent_tower(images, hparams):
 
         latent_std = slim.conv2d(
             latent_enc3,
-            hparams.latent_channels, [3, 3],
+            hparams['latent_channels'], [3, 3],
             stride=2,
             scope='latent_std',
             normalizer_fn=tf_layers.layer_norm,
             normalizer_params={'scope': 'latent_std_norm'})
 
-        latent_std += hparams.latent_std_min
+        latent_std += hparams['latent_std_min']
 
     return latent_mean, latent_std
 
@@ -606,11 +605,11 @@ def generator_fn(inputs, mode, hparams):
                             iter_num=iter_num,
                             k=schedule_sampling_k,
                             use_state='actions' in inputs,
-                            num_masks=hparams.num_masks,
-                            cdna=hparams.transformation == 'cdna',
-                            dna=hparams.transformation == 'dna',
-                            stp=hparams.transformation == 'stp',
-                            context_frames=hparams.context_frames,
+                            num_masks=hparams['num_masks'],
+                            cdna=hparams['transformation'] == 'cdna',
+                            dna=hparams['transformation'] == 'dna',
+                            stp=hparams['transformation'] == 'stp',
+                            context_frames=hparams['context_frames'],
                             hparams=hparams)
         outputs.update({
             'gen_images_enc': tf.stack(gen_images_enc, axis=0),
