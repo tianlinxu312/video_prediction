@@ -29,7 +29,7 @@ from tf_slim import layers
 from video_prediction.models import VideoPredictionModel
 
 
-layer_norm = tf.compat.v1.keras.layers.LayerNormalization
+layer_norm = tf.compat.v1.keras.layers.LayerNormalization(axis=-1)
 
 
 def init_state(inputs,
