@@ -619,12 +619,12 @@ class VideoDataset(BaseVideoDataset):
         self.action_like_names_and_shapes = OrderedDict([(k, tuple(v)) for k, v in action_like_names_and_shapes.items()])
 
         # set sequence_length to the longest possible if it is not specified
-        if not self.hparams.sequence_length:
-            self.hparams.sequence_length = (self._max_sequence_length - 1) // (self.hparams.frame_skip + 1) + 1
+        if not self.hparams['sequence_length']:
+            self.hparams['sequence_length'] = (self._max_sequence_length - 1) // (self.hparams.frame_skip + 1) + 1
 
     def set_sequence_length(self, sequence_length):
         if not sequence_length:
-            sequence_length = (self._max_sequence_length - 1) // (self.hparams.frame_skip + 1) + 1
+            sequence_length = (self._max_sequence_length - 1) // (self.hparams['frame_skip'] + 1) + 1
         self.hparams.sequence_length = sequence_length
 
     def parser(self, serialized_example):
