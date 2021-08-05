@@ -5,6 +5,7 @@ import re
 from collections import OrderedDict
 
 import numpy as np
+import six
 import tensorflow as tf
 # from tensorflow.contrib.training import HParams
 from tensorflow.python.util import nest
