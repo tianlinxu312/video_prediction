@@ -42,7 +42,7 @@ class BaseVideoDataset(object):
             raise ValueError('hparam_def and initialization values are '
                              'mutually exclusive')
         else:
-          for name, value in six.iteritems(kwargs):
+          for name, value in six.iteritems(self.get_default_hparams_dict()):
             self.add_hparam(name, value)
 
         if self.mode not in ('train', 'val', 'test'):
