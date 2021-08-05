@@ -36,7 +36,7 @@ DNA_KERN_SIZE = 5
 
 @add_arg_scope
 def layer_norm():
-    return tf.keras.layers.LayerNormalization(axis=-1, name='ln')
+    return tf.compat.v1.keras.layers.LayerNormalization(axis=-1, name='ln')
 
 
 def init_state(inputs,
