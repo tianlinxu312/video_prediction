@@ -412,7 +412,7 @@ class BaseVideoDataset(object):
         """
         for name, value in values_dict.items():
           self.set_hparam(name, value)
-        return self
+        return self.set_hparam
     
 
     def parse_hparams(self, hparams_dict, hparams):
