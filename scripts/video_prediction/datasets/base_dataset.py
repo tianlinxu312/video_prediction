@@ -418,7 +418,7 @@ class BaseVideoDataset(object):
     def parse_hparams(self, hparams_dict, hparams):
         # parsed_hparams = self.get_default_hparams().override_from_dict(hparams_dict or {})
         if hparams_dict:
-          parsed_hparams = self.override_from_dict(hparams_dict or {})
+          parsed_hparams = hparams_dict
         else:
           parsed_hparams = self.get_default_hparams_dict()
         # parsed_hparams = self.override_from_dict(hparams_dict or {})
