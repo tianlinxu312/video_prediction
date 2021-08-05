@@ -2,6 +2,7 @@ import glob
 import os
 import random
 import re
+import six
 from collections import OrderedDict
 
 import numpy as np
