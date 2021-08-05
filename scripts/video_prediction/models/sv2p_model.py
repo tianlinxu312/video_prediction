@@ -17,7 +17,7 @@
 
 import itertools
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 # import tensorflow.contrib.slim as slim
 # from tensorflow.contrib.layers.python import layers as tf_layers
 # from tensorflow.contrib.slim import add_arg_scope
@@ -569,13 +569,13 @@ def generator_fn(inputs, mode, hparams):
     action_dim, state_dim = 4, 3
 
     # if not use_state, use zero actions and states to match reference implementation.
-    actions = inputs.get('actions', tf.zeros([hparams.sequence_length - 1, batch_size, action_dim]))
+    actions = inputs.get('actions', tf.zeros([hparams['sequence_length'] - 1, batch_size, action_dim]))
     actions = tf.unstack(actions, axis=0)
-    states = inputs.get('states', tf.zeros([hparams.sequence_length, batch_size, state_dim]))
+    states = inputs.get('states', tf.zeros([hparams['sequence_length'], batch_size, state_dim]))
     states = tf.unstack(states, axis=0)
     iter_num = tf.to_float(tf.train.get_or_create_global_step())
 
-    schedule_sampling_k = hparams.schedule_sampling_k if mode == 'train' else -1
+    schedule_sampling_k = hparams['schedule_sampling_k'] if mode == 'train' else -1
     gen_images, gen_states = \
         construct_model(images,
                         actions,
@@ -584,11 +584,11 @@ def generator_fn(inputs, mode, hparams):
                         iter_num=iter_num,
                         k=schedule_sampling_k,
                         use_state='actions' in inputs,
-                        num_masks=hparams.num_masks,
-                        cdna=hparams.transformation == 'cdna',
-                        dna=hparams.transformation == 'dna',
-                        stp=hparams.transformation == 'stp',
-                        context_frames=hparams.context_frames,
+                        num_masks=hparams['num_masks'],
+                        cdna=hparams['transformation'] == 'cdna',
+                        dna=hparams['transformation'] == 'dna',
+                        stp=hparams['transformation'] == 'stp',
+                        context_frames=hparams['context_frames'],
                         hparams=hparams)
     outputs = {
         'gen_images': tf.stack(gen_images, axis=0),
