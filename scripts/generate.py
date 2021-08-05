@@ -104,9 +104,9 @@ def main():
     VideoPredictionModel = models.get_model_class(args.model)
     hparams_dict = dict(model_hparams_dict)
     hparams_dict.update({
-        'context_frames': dataset.hparams.context_frames,
-        'sequence_length': dataset.hparams.sequence_length,
-        'repeat': dataset.hparams.time_shift,
+        'context_frames': dataset.hparams['context_frames'],
+        'sequence_length': dataset.hparams['sequence_length'],
+        'repeat': dataset.hparams['time_shift'],
     })
     model = VideoPredictionModel(
         mode=args.mode,
