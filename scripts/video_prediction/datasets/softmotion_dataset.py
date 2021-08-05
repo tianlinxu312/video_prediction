@@ -36,7 +36,7 @@ class SoftmotionVideoDataset(VideoDataset):
             else:
                 raise ValueError('The examples have images under more than one name.')
         self.state_like_names_and_shapes['images'] = '%%d/%s/encoded' % image_name, None
-        if self.hparams.use_state:
+        if self.hparams['use_state']:
             self.state_like_names_and_shapes['states'] = '%d/endeffector_pos', (3,)
             self.action_like_names_and_shapes['actions'] = '%d/action', (4,)
         if any([re.search('\d+/object_pos', name) for name in feature.keys()]):
