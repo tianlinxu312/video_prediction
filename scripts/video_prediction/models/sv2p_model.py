@@ -26,8 +26,6 @@ import tf_slim as slim
 from tensorflow.compat.v1 import layers as tf_layers
 from tf_slim import add_arg_scope
 from tf_slim import layers
-
-arg_scope = tf_slim.arg_scope
 from video_prediction.models import VideoPredictionModel
 
 
