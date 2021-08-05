@@ -631,22 +631,22 @@ class VideoPredictionModel(BaseVideoPredictionModel):
                 
         if 'kl_weight' in self.hparams:
             if self.hparams['kl_weight']:
-            if self.hparams['kl_anneal'] == 'none':
-                self.kl_weight = tf.constant(self.hparams['kl_weight'], tf.float32)
-            elif self.hparams['kl_anneal'] == 'sigmoid':
-                k = self.hparams['kl_anneal_k'] 
-                if k == -1.0:
-                    raise ValueError('Invalid kl_anneal_k %d when kl_anneal is sigmoid.' % k)
-                iter_num = tf.train.get_or_create_global_step()
-                self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.to_float(iter_num) / k))
-            elif self.hparams['kl_anneal']  == 'linear':
-                start_step, end_step = self.hparams['kl_anneal_steps'] 
-                step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
-                self.kl_weight = self.hparams['kl_weight'] * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
+                if self.hparams['kl_anneal'] == 'none':
+                    self.kl_weight = tf.constant(self.hparams['kl_weight'], tf.float32)
+                elif self.hparams['kl_anneal'] == 'sigmoid':
+                    k = self.hparams['kl_anneal_k'] 
+                    if k == -1.0:
+                        raise ValueError('Invalid kl_anneal_k %d when kl_anneal is sigmoid.' % k)
+                    iter_num = tf.train.get_or_create_global_step()
+                    self.kl_weight = self.hparams['kl_weight']/ (1 + k * tf.exp(-tf.to_float(iter_num) / k))
+                elif self.hparams['kl_anneal']  == 'linear':
+                    start_step, end_step = self.hparams['kl_anneal_steps'] 
+                    step = tf.clip_by_value(tf.train.get_or_create_global_step(), start_step, end_step)
+                    self.kl_weight = self.hparams['kl_weight'] * tf.to_float(step - start_step) / tf.to_float(end_step - start_step)
+                else:
+                    raise NotImplementedError
             else:
-                raise NotImplementedError
-        else:
-            self.kl_weight = None
+                self.kl_weight = None
 
         # member variables that should be set by `self.build_graph`
         # (in addition to the ones in the base class)
