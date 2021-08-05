@@ -3,7 +3,7 @@ from .base_dataset import VideoDataset, SequenceExampleVideoDataset, VarLenFeatu
 from .google_robot_dataset import GoogleRobotVideoDataset
 from .sv2p_dataset import SV2PVideoDataset
 from .softmotion_dataset import SoftmotionVideoDataset
-from .kth_dataset import KTHVideoDataset
+# from .kth_dataset import KTHVideoDataset
 from .ucf101_dataset import UCF101VideoDataset
 from .cartgripper_dataset import CartgripperVideoDataset
 

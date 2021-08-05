@@ -10,14 +10,20 @@ import random
 
 import cv2
 import numpy as np
+<<<<<<< HEAD
 import tensorflow.compat.v1 as tf
 from video_prediction import datasets, models
+=======
+import tensorflow as tf
+# from video_prediction import datasets, models
+>>>>>>> 879bbd963dc8825d16d03dae3f43d3d675f766ce
 from video_prediction.utils.ffmpeg_gif import save_gif
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", type=str, required=True, help="either a directory containing subdirectories "
+    parser.add_argument("--input_dir", type=str, default="../tensorflow_datasets/bair_robot_pushing_small",
+                        help="either a directory containing subdirectories "
                                                                      "train, val, test, etc, or a directory containing "
                                                                      "the tfrecords")
     parser.add_argument("--results_dir", type=str, default='results', help="ignored if output_gif_dir is specified")
@@ -27,7 +33,8 @@ def main():
                                                  "results_gif_dir/model_fname")
     parser.add_argument("--output_png_dir", help="output directory where samples are saved as pngs. default is "
                                                  "results_png_dir/model_fname")
-    parser.add_argument("--checkpoint", help="directory with checkpoint or checkpoint name (e.g. checkpoint_dir/model-200000)")
+    parser.add_argument("--checkpoint", default="../pretrained_models/bair_action_free/ours_savp",
+                        help="directory with checkpoint or checkpoint name (e.g. checkpoint_dir/model-200000)")
 
     parser.add_argument("--mode", type=str, choices=['val', 'test'], default='val', help='mode for dataset, val or test.')
 
@@ -52,6 +59,8 @@ def main():
     if args.seed is not None:
         np.random.seed(args.seed)
         random.seed(args.seed)
+
+    layer_norm = tf.compat.v1.keras.layers.LayerNormalization(axis=-1, name='ln')
 
     args.results_gif_dir = args.results_gif_dir or args.results_dir
     args.results_png_dir = args.results_png_dir or args.results_dir
