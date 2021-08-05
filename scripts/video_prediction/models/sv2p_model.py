@@ -632,7 +632,7 @@ class SV2PVideoPredictionModel(VideoPredictionModel):
     def __init__(self, *args, **kwargs):
         super(SV2PVideoPredictionModel, self).__init__(
             generator_fn, *args, ** kwargs)
-        self.deterministic = not self.hparams.stochastic_model
+        self.deterministic = not self.hparams['stochastic_model']
 
     def get_default_hparams_dict(self):
         default_hparams = super(SV2PVideoPredictionModel, self).get_default_hparams_dict()
