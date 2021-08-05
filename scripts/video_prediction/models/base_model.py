@@ -611,7 +611,7 @@ class VideoPredictionModel(BaseVideoPredictionModel):
         self.discriminator_scope = discriminator_scope
         self.aggregate_nccl = aggregate_nccl
 
-        if any(self.hparams.lr_boundaries):
+        if any(self.hparams['lr_boundaries']):
             global_step = tf.train.get_or_create_global_step()
             lr_values = list(self.hparams.lr * 0.1 ** np.arange(len(self.hparams.lr_boundaries) + 1))
             self.learning_rate = tf.train.piecewise_constant(global_step, self.hparams.lr_boundaries, lr_values)
