@@ -33,12 +33,12 @@ from video_prediction.models import VideoPredictionModel
 
 # Amount to use when lower bounding tensors
 RELU_SHIFT = 1e-12
-
 # kernel size for DNA and CDNA.
 DNA_KERN_SIZE = 5
 
-@slim.add_arg_scope
-layer_norm = tf.keras.layers.LayerNormalization(axis=-1, name='ln')
+@add_arg_scope
+def layer_norm():
+    return tf.keras.layers.LayerNormalization(axis=-1, name='ln')
 
 
 def init_state(inputs,
@@ -65,7 +65,7 @@ def init_state(inputs,
     return initial_state
 
 
-@slim.add_arg_scope
+@add_arg_scope
 def basic_conv_lstm_cell(inputs,
                          state,
                          num_channels,
